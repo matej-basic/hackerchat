@@ -7,12 +7,12 @@ deploy:
       - ./deployments/websocket-deployment.yaml
       - ./deployments/auth-mongo-deployment.yaml
       - ./deployments/frontend.yaml
-      - ./deployments/hackerchat-ingress.yaml
+      - ./deployments/aws-ingress.yaml
 build: 
   local:
     push: true
   artifacts: 
-     - image: hackerchat.azurecr.io/hackerchat/frontend
+     - image: matejbasic/frontend
        context: ../frontend
        docker: 
          dockerfile: Dockerfile
@@ -20,7 +20,7 @@ build:
          manual: 
            - src: '*'
              dest: .      
-     - image: hackerchat.azurecr.io/hackerchat/auth
+     - image: matejbasic/auth
        context: ../auth
        docker: 
          dockerfile: Dockerfile
@@ -28,7 +28,7 @@ build:
          manual: 
            - src: '*'
              dest: .     
-     - image: hackerchat.azurecr.io/hackerchat/websocket
+     - image: matejbasic/websocket
        context: ../websocket
        docker: 
          dockerfile: Dockerfile
