@@ -1,0 +1,57 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  namespace: hackerchat
+  name: auth-depl
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: auth
+  template: 
+    metadata: 
+      labels:
+        app: auth
+    spec: 
+      containers: 
+        - name: auth
+          image: matejbasic/auth
+          ports:
+          - containerPort: 3000
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 1024Mi
+            requests:
+              cpu: 2000m
+              memory: 1024Mi
+          volumeMounts: 
+          - name: hackerchat-cert
+            mountPath: /run/hackerchat-cert
+            readOnly: yes
+          env: 
+          - name: JWT_KEY
+            valueFrom: 
+              secretKeyRef: 
+                name: jwt-secret
+                key: JWT_KEY
+      volumes:
+      - name: hackerchat-cert
+        secret: 
+          secretName: hackerchat-cert 
+          optional: false
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: auth-cip
+  namespace: hackerchat
+spec: 
+  selector: 
+    app: auth
+  #type: ClusterIP
+  ports: 
+    - name: auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

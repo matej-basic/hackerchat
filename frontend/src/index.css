@@ -1,0 +1,304 @@
+@font-face {
+  font-family: customFont;
+  src: url(../public/custom-font.ttf);
+}
+
+@font-face {
+  font-family: typingFont;
+  src: url(../public/typing-font.ttf);
+}
+
+html, body {
+  background-color: black;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.root {
+  overflow: hidden;
+}
+
+.container {
+  height: 75vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  animation-delay: 3s;
+  animation-name: moveTextToTop;
+  animation-duration: 3s;
+  animation-direction: forwards;
+  animation-fill-mode: forwards;
+}
+
+.typewriter {
+  font-size: 48px;
+  font-family: customFont;
+  color: #4AF626;
+  white-space: nowrap;
+  overflow: hidden;
+  border-right: .15em solid orange;
+  width: 0;
+  max-width: max-content;
+  animation: 
+    typing 4s steps(40, end) forwards,
+    blink-caret .75s 4 forwards;
+}
+
+.typewriter:after {
+  content: "WELCOME TO HACKERCHAT";
+  opacity: 100%;
+  animation: fadeOutText 3s 3s forwards;
+}
+
+.hackerchatbanner {
+  font-size: 48px;
+  font-family: customFont;
+  color: #4AF626;
+  max-width: max-content;
+}
+
+.hackerchatbanner:after {
+  content: "HACKERCHAT";
+  opacity: 0%;
+  animation: fadeInText 3s 3s forwards;
+}
+
+.login-box {
+  display: flex;
+  overflow-y: hidden;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-top: 250px;
+  opacity: 0%;
+  animation: fadeInText 3s 6s forwards;
+}
+
+.tab-btn {
+  display: flex;
+}
+
+.login-tab {
+  padding-right: 3vh;
+}
+
+.register-tab {
+  padding-left: 4vh;
+}
+
+.login-tab, 
+.register-tab,
+.sign-out-button,
+.hello-button,
+.finish-chat {
+  text-decoration: none;
+  width: max-content;
+  font-family: customFont;
+  font-size: 24px;
+  color: #4AF626;
+  cursor: pointer;
+}
+
+.sign-out-button {
+  position: absolute;
+  right: 0px;
+  padding-right: 12px;
+  top: 0px;
+  padding-top: 14px;
+  opacity: 0%;
+  animation: fadeInText 3s 6s forwards;
+}
+
+.hello-button {
+  position: absolute;
+  left: 0px;
+  padding-left: 12px;
+  top: 0px;
+  padding-top: 14px;
+  opacity: 0%;
+  animation: fadeInText 3s 6s forwards;
+}
+
+.finish-chat {
+  position: absolute;
+  left: 0px;
+  padding-left: 12px;
+  bottom: 0px;
+  padding-bottom: 15px;
+  opacity: 0%;
+  animation: fadeInText 3s 1s forwards;
+}
+
+.inp {
+  width: 97%;
+  padding-top: 12px;
+  margin-bottom: 15px;
+  font-size: 28px;
+  font-family: typingFont;
+  border: 2px solid #888;
+  border-bottom: 5px solid #888;
+  background-color: black;
+  color: lightgreen;
+}
+
+::-webkit-input-placeholder {
+  text-align: center;
+}
+
+:-moz-placeholder {
+  text-align: center;
+}
+
+.sub-btn {
+  text-decoration: none;
+  width: 100%;
+  font-size: 24px;
+  font-family: typingFont;
+  border: 2px solid #4AF626;
+  color: green;
+}
+
+.header-links {
+  font-family: customFont;
+  font-size: 18px;
+  color: #4AF626;
+}
+
+.message-form {
+  opacity: 0%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 20px;
+  animation: fadeInText 3s 1s forwards;
+}
+
+.send-message {
+  border: 1px solid #555;
+  background-color: transparent;
+  width: 50%;
+  padding: 10px;
+  border-radius: 20px;
+  font-family: typingFont;
+  font-size: 18px;
+  color: green;
+  text-align: center;
+}
+
+.chat-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding-top: 50px;
+  max-height: 75vh;
+  overflow: hidden;
+}
+
+.chat-box {
+  opacity: 0%;
+  color: white;
+  box-sizing: border-box;
+  animation: fadeInText 3s 1s forwards;
+  width: 50%;
+  overflow: scroll;
+  border-radius: 20px;
+}
+
+.message {
+  border-radius: 20px;
+  background-color: #444;
+  margin: 4px;
+  padding: 5px 10px;
+  display: inline-block;
+  font-family: typingFont;
+  font-size: 18px;
+}
+
+.message-row-mine {
+  text-align: right;
+}
+
+.message-mine {
+  border-radius: 20px;
+  background-color: dodgerblue;
+  margin: 4px;
+  padding: 5px 10px;
+  display: inline-block;
+  font-family: typingFont;
+  font-size: 18px;
+}
+
+.message-author {
+  color: #4AF626;
+}
+
+.userlist-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.userlist-row {
+  font-size: 28px;
+  color: white;
+  font-family: typingFont;
+  padding-bottom: 8px;
+  cursor: pointer;
+}
+
+.userlist-header {
+  padding-top: 36px;
+  padding-bottom: 72px;
+  font-size: 28px;
+  font-family: customFont;
+  color: #4AF626;
+  max-width: max-content;
+}
+
+.user-clicked {
+  color: #4AF626;
+}
+
+::-webkit-scrollbar {
+  width: 0;
+  background: transparent;
+}
+
+@keyframes blinker-animation {
+  to {
+    visibility: hidden;
+  }
+}
+
+@keyframes typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes fadeOutText {
+  from { opacity: 100%; }
+  to { opacity: 0%; }
+}
+
+@keyframes fadeInText {
+  from { opacity: 0%; }
+  to { opacity: 100%; }
+}
+
+@keyframes blink-caret {
+  from, to { border-color: transparent; }
+  50% { border-color: #4AF626; }
+}
+
+@keyframes moveTextToTop {
+  from { height: 75vh; }
+  to { height: 6vh; }
+}

@@ -1,0 +1,38 @@
+apiVersion: skaffold/v2alpha3
+kind: Config 
+deploy: 
+  kubectl:
+    manifests: 
+      - ./deployments/auth-deployment.yaml
+      - ./deployments/websocket-deployment.yaml
+      - ./deployments/auth-mongo-deployment.yaml
+      - ./deployments/frontend.yaml
+      - ./deployments/hackerchat-ingress.yaml
+build: 
+  local:
+    push: true
+  artifacts: 
+     - image: hackerchat.azurecr.io/hackerchat/frontend
+       context: ../frontend
+       docker: 
+         dockerfile: Dockerfile
+       sync: 
+         manual: 
+           - src: '*'
+             dest: .      
+     - image: hackerchat.azurecr.io/hackerchat/auth
+       context: ../auth
+       docker: 
+         dockerfile: Dockerfile
+       sync: 
+         manual: 
+           - src: '*'
+             dest: .     
+     - image: hackerchat.azurecr.io/hackerchat/websocket
+       context: ../websocket
+       docker: 
+         dockerfile: Dockerfile
+       sync: 
+         manual: 
+           - src: '*'
+             dest: .     

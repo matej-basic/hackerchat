@@ -1,0 +1,44 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  namespace: hackerchat
+  name: websocket-depl
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: websocket
+  template: 
+    metadata: 
+      labels:
+        app: websocket
+    spec: 
+      containers: 
+        - name: websocket
+          image: matejbasic/websocket
+          ports:
+          - containerPort: 3000
+          volumeMounts: 
+          - name: hackerchat-cert
+            mountPath: /run/hackerchat-cert
+            readOnly: yes
+      volumes:
+      - name: hackerchat-cert
+        secret: 
+          secretName: hackerchat-cert 
+          optional: false
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: websocket-cip
+  namespace: hackerchat
+spec: 
+  selector: 
+    app: websocket
+  type: ClusterIP
+  ports: 
+    - name: websocket
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

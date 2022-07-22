@@ -1,0 +1,64 @@
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata: 
+  namespace: hackerchat
+  name: hackerchat-ingress
+  annotations: 
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/backend-protocol: HTTPS
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:eu-central-1:636873884847:certificate/0a8a612e-f97e-4732-b6b7-a0a10a7ebfdd
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}, {"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/ssl-redirect: "443"
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTPS
+    alb.ingress.kubernetes.io/healthcheck-port: traffic-port
+    
+spec: 
+  ingressClassName: alb
+  rules: 
+    - host: hackerchat.ml
+      http: 
+        paths: 
+          - path: /api/users/signup
+            pathType: Exact
+            backend: 
+              service: 
+                name: auth-cip
+                port: 
+                  number: 3000
+          - path: /api/users/signin
+            pathType: Exact
+            backend: 
+              service: 
+                name: auth-cip
+                port: 
+                  number: 3000
+          - path: /api/users/signout
+            pathType: Exact
+            backend: 
+              service: 
+                name: auth-cip
+                port: 
+                  number: 3000
+          - path: /api/users/currentuser
+            pathType: Exact
+            backend: 
+              service: 
+                name: auth-cip
+                port: 
+                  number: 3000
+          - path: /api/websocket/connect
+            pathType: Exact
+            backend: 
+              service: 
+                name: websocket-cip
+                port: 
+                  number: 3000
+          - path: /
+            pathType: Prefix
+            backend: 
+              service: 
+                name: frontend-cip-https
+                port: 
+                  number: 443

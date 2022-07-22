@@ -1,0 +1,44 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  namespace: hackerchat
+  name: frontend-depl
+spec:
+  replicas: 1
+  selector: 
+    matchLabels: 
+      app: frontend
+  template: 
+    metadata: 
+      labels:
+        app: frontend
+    spec: 
+      containers: 
+        - name: frontend
+          image: matejbasic/frontend
+          ports:
+          - containerPort: 443
+          volumeMounts: 
+          - name: hackerchat-cert
+            mountPath: /run/hackerchat-cert
+            readOnly: yes
+      volumes:
+      - name: hackerchat-cert
+        secret: 
+          secretName: hackerchat-cert 
+          optional: false
+---
+apiVersion: v1
+kind: Service
+metadata: 
+  name: frontend-cip-https
+  namespace: hackerchat
+spec: 
+  selector: 
+    app: frontend
+  type: ClusterIP
+  ports: 
+    - name: frontend-https
+      protocol: TCP
+      port: 443
+      targetPort: 443
