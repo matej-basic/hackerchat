@@ -82,8 +82,6 @@ const HandleChatClose = (username: String) => {
 }
 
 const NotifyUser = (userToNotify: Client, notifyingUser: Client, exportedPrivateKey: String) => {
-    console.log("userToNotify: " + userToNotify.username)
-    console.log("notifyingUser: " + JSON.stringify(notifyingUser, null, 4))
     userToNotify.socket.send("CHATPROPOSAL---" + notifyingUser.username + "---" + exportedPrivateKey)
 }
 
@@ -107,8 +105,6 @@ wss.on('connection', (ws) => {
             newConnection = { socket: ws, username: data.toString().slice(10) };
             clients.push(newConnection);
             users.push(newUser);
-            console.log("Added to clients: " + JSON.stringify(newConnection, null, 4))
-            console.log("Added to users: " + JSON.stringify(newUser, null, 4))
 
             clients.forEach(client => {
                 client.socket.send("USERS---" + JSON.stringify(users));
@@ -120,8 +116,6 @@ wss.on('connection', (ws) => {
             var firstUsername = chatData.split("---")[0]
             var secondUsername = chatData.split("---")[1]
             var exportedPrivateKey = chatData.split("---")[2]
-            console.log("firstUsername: " + firstUsername)
-            console.log("secondUsername: " + secondUsername)
             HandleNewChat(firstUsername, secondUsername, exportedPrivateKey)
         } else if ((/^CHATACCEPT;/.test(data.toString()))) {
             var chatData = data.toString().slice(11)
@@ -130,7 +124,6 @@ wss.on('connection', (ws) => {
             try {
                 senderPublicKey = chatData.split("+")[1].split('---')[1]
             } catch (error) { }
-            console.log("senderPublicKey: " + senderPublicKey)
             HandleChatAccept(firstUsername, secondUsername, senderPublicKey)
         } else if ((/^CHATEND;/.test(data.toString()))) {
             var firstUsername = data.toString().split(";")[1]
