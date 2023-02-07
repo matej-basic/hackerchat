@@ -1,14 +1,14 @@
 import express, { Request, Response } from 'express'
 import 'express-async-errors';
 import { json } from 'body-parser';
-import https from 'https';
+import http from 'http';
 import fs from 'fs';
 import cookieSession from 'cookie-session';
 import WebSocket from 'ws';
 
-const privateKey = fs.readFileSync("/run/hackerchat-cert/tls.key");
-const certificate = fs.readFileSync("/run/hackerchat-cert/tls.crt");
-const credentials = {key: privateKey, cert: certificate};
+//const privateKey = fs.readFileSync("/run/hackerchat-cert/tls.key");
+//const certificate = fs.readFileSync("/run/hackerchat-cert/tls.crt");
+//const credentials = {key: privateKey, cert: certificate};
 
 interface Client {
     socket: WebSocket,
@@ -41,17 +41,17 @@ exp.get('/api/websocket/getusers', (req, res) => {
     res.status(200).send(JSON.stringify(users));
 })
 
-const server = https.createServer(credentials, exp);
+const server = http.createServer(exp)
 
-const wss = new WebSocket.Server({server:server, clientTracking: true});
+const wss = new WebSocket.Server({ server: server, clientTracking: true });
 
 const HandleNewChat = (firstUsername: String, secondUsername: String, exportedPrivateKey: String) => {
     // Find an index in the array of clients for each username
     var firstClient: Client; // Logged in user
     var secondClient: Client; // the user with whom the logged in user wants to chat
     clients.forEach(client => {
-        if ( client.username.username == firstUsername) firstClient = client;
-        if ( client.username.username == secondUsername) secondClient = client;
+        if (client.username.username == firstUsername) firstClient = client;
+        if (client.username.username == secondUsername) secondClient = client;
     })
 
     NotifyUser(secondClient!, firstClient!, exportedPrivateKey)
@@ -62,8 +62,8 @@ const HandleChatAccept = (firstUsername: String, secondUsername: String, senderP
     var firstClient: Client; // Logged in user
     var secondClient: Client; // the user with whom the logged in user wants to chat
     clients.forEach(client => {
-        if ( client.username.username == firstUsername) firstClient = client;
-        if ( client.username.username == secondUsername) secondClient = client;
+        if (client.username.username == firstUsername) firstClient = client;
+        if (client.username.username == secondUsername) secondClient = client;
     })
 
     AcceptUser(secondClient!, firstClient!, senderPublicKey);
@@ -78,7 +78,7 @@ const HandleChatClose = (username: String) => {
 
     try {
         otherClient!.socket.send("CHATEND---");
-    } catch (error) { console.log("NISAM NASAO DRUGOG KLIJENTA")}
+    } catch (error) { console.log("NISAM NASAO DRUGOG KLIJENTA") }
 }
 
 const NotifyUser = (userToNotify: Client, notifyingUser: Client, exportedPrivateKey: String) => {
@@ -87,7 +87,7 @@ const NotifyUser = (userToNotify: Client, notifyingUser: Client, exportedPrivate
 
 const AcceptUser = (userToNotify: Client, notifyingUser: Client, senderPublicKey: String) => {
     userToNotify.socket.send("CHATACCEPT---" + notifyingUser.username.username + "---" + senderPublicKey);
-    chatSessions.push({firstUser: userToNotify, secondUser: notifyingUser})
+    chatSessions.push({ firstUser: userToNotify, secondUser: notifyingUser })
 }
 
 let clients: Array<Client> = [];
@@ -100,12 +100,12 @@ wss.on('connection', (ws) => {
     var senderPublicKey: String;
     console.log("A client with ID " + clients.length + " has connected.");
     ws.on('message', (data) => {
-        if ((/^USERNAME: /.test(data.toString()))) { 
+        if ((/^USERNAME: /.test(data.toString()))) {
             newUser = { username: data.toString().slice(10) }
-            newConnection = { socket: ws, username: newUser}; 
+            newConnection = { socket: ws, username: newUser };
             clients.push(newConnection);
             users.push(newUser);
-            
+
             clients.forEach(client => {
                 client.socket.send("USERS---" + JSON.stringify(users));
             });
@@ -124,7 +124,7 @@ wss.on('connection', (ws) => {
             var secondUsername = chatData.split("---")[1].split("+")[0]
             try {
                 senderPublicKey = chatData.split("+")[1].split('---')[1]
-            } catch (error) {}
+            } catch (error) { }
             console.log("senderPublicKey: " + senderPublicKey)
             HandleChatAccept(firstUsername, secondUsername, senderPublicKey)
         } else if ((/^CHATEND;/.test(data.toString()))) {
@@ -148,7 +148,7 @@ wss.on('connection', (ws) => {
     ws.onopen = (event) => {
         console.log("New connection is open")
     }
-    
+
     ws.onclose = (event) => {
         try {
             users.splice(users.indexOf(newConnection.username), 1)
@@ -156,13 +156,13 @@ wss.on('connection', (ws) => {
             console.log("ERROR: " + error)
         }
 
-        clients.splice(clients.indexOf(newConnection),1);
+        clients.splice(clients.indexOf(newConnection), 1);
         clients.forEach(client => {
             client.socket.send("USERS---" + JSON.stringify(users));
         });
-        
+
         console.log("A client with ID " + clients.length + " has disconnected.");
-        
+
     }
     setInterval(() => {
         ws.ping("ping");
