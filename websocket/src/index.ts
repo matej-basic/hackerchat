@@ -83,7 +83,7 @@ const HandleChatClose = (username: String) => {
 
 const NotifyUser = (userToNotify: Client, notifyingUser: Client, exportedPrivateKey: String) => {
     console.log("userToNotify: " + userToNotify.username)
-    console.log("notifyingUser: " + notifyingUser.username)
+    console.log("notifyingUser: " + JSON.stringify(notifyingUser, null, 4))
     userToNotify.socket.send("CHATPROPOSAL---" + notifyingUser.username + "---" + exportedPrivateKey)
 }
 
