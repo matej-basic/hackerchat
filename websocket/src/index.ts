@@ -169,5 +169,5 @@ wss.on('connection', (ws) => {
     }, 45000)
 })
 
-server.listen(3000);
+server.listen(process.env.PORT);
 
