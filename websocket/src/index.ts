@@ -12,7 +12,7 @@ import WebSocket from 'ws';
 
 interface Client {
     socket: WebSocket,
-    username: User
+    username: string
 }
 
 interface User {
@@ -50,8 +50,8 @@ const HandleNewChat = (firstUsername: String, secondUsername: String, exportedPr
     var firstClient: Client; // Logged in user
     var secondClient: Client; // the user with whom the logged in user wants to chat
     clients.forEach(client => {
-        if (client.username.username == firstUsername) firstClient = client;
-        if (client.username.username == secondUsername) secondClient = client;
+        if (client.username == firstUsername) firstClient = client;
+        if (client.username == secondUsername) secondClient = client;
     })
 
     NotifyUser(secondClient!, firstClient!, exportedPrivateKey)
@@ -62,8 +62,8 @@ const HandleChatAccept = (firstUsername: String, secondUsername: String, senderP
     var firstClient: Client; // Logged in user
     var secondClient: Client; // the user with whom the logged in user wants to chat
     clients.forEach(client => {
-        if (client.username.username == firstUsername) firstClient = client;
-        if (client.username.username == secondUsername) secondClient = client;
+        if (client.username == firstUsername) firstClient = client;
+        if (client.username == secondUsername) secondClient = client;
     })
 
     AcceptUser(secondClient!, firstClient!, senderPublicKey);
@@ -72,8 +72,8 @@ const HandleChatAccept = (firstUsername: String, secondUsername: String, senderP
 const HandleChatClose = (username: String) => {
     var otherClient: Client
     chatSessions.forEach(session => {
-        if (session.firstUser.username.username == username) otherClient = session.secondUser; chatSessions.splice(chatSessions.indexOf(session), 1)
-        if (session.secondUser.username.username == username) otherClient = session.firstUser; chatSessions.splice(chatSessions.indexOf(session), 1)
+        if (session.firstUser.username == username) otherClient = session.secondUser; chatSessions.splice(chatSessions.indexOf(session), 1)
+        if (session.secondUser.username == username) otherClient = session.firstUser; chatSessions.splice(chatSessions.indexOf(session), 1)
     })
 
     try {
@@ -82,11 +82,11 @@ const HandleChatClose = (username: String) => {
 }
 
 const NotifyUser = (userToNotify: Client, notifyingUser: Client, exportedPrivateKey: String) => {
-    userToNotify.socket.send("CHATPROPOSAL---" + notifyingUser.username.username + "---" + exportedPrivateKey)
+    userToNotify.socket.send("CHATPROPOSAL---" + notifyingUser.username + "---" + exportedPrivateKey)
 }
 
 const AcceptUser = (userToNotify: Client, notifyingUser: Client, senderPublicKey: String) => {
-    userToNotify.socket.send("CHATACCEPT---" + notifyingUser.username.username + "---" + senderPublicKey);
+    userToNotify.socket.send("CHATACCEPT---" + notifyingUser.username + "---" + senderPublicKey);
     chatSessions.push({ firstUser: userToNotify, secondUser: notifyingUser })
 }
 
@@ -102,7 +102,7 @@ wss.on('connection', (ws) => {
     ws.on('message', (data) => {
         if ((/^USERNAME: /.test(data.toString()))) {
             newUser = { username: data.toString().slice(10) }
-            newConnection = { socket: ws, username: newUser };
+            newConnection = { socket: ws, username: data.toString().slice(10) };
             clients.push(newConnection);
             users.push(newUser);
 
@@ -151,7 +151,7 @@ wss.on('connection', (ws) => {
 
     ws.onclose = (event) => {
         try {
-            users.splice(users.indexOf(newConnection.username), 1)
+            users.splice(users.indexOf(newConnection), 1)
         } catch (error) {
             console.log("ERROR: " + error)
         }
