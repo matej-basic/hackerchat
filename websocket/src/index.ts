@@ -54,6 +54,9 @@ const HandleNewChat = (firstUsername: String, secondUsername: String, exportedPr
         if (client.username == secondUsername) secondClient = client;
     })
 
+    console.log("secondClient: " + secondClient.username)
+    console.log("firstClient: " + firstClient.username)
+
     NotifyUser(secondClient!, firstClient!, exportedPrivateKey)
 }
 
@@ -82,6 +85,8 @@ const HandleChatClose = (username: String) => {
 }
 
 const NotifyUser = (userToNotify: Client, notifyingUser: Client, exportedPrivateKey: String) => {
+    console.log("userToNotify: " + userToNotify.username)
+    console.log("notifyingUser: " + notifyingUser.username)
     userToNotify.socket.send("CHATPROPOSAL---" + notifyingUser.username + "---" + exportedPrivateKey)
 }
 
