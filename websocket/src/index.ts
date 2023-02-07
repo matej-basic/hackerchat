@@ -120,7 +120,8 @@ wss.on('connection', (ws) => {
             var firstUsername = chatData.split("---")[0]
             var secondUsername = chatData.split("---")[1]
             var exportedPrivateKey = chatData.split("---")[2]
-            console.log("exportedPrivateKey: " + exportedPrivateKey)
+            console.log("firstUsername: " + firstUsername)
+            console.log("secondUsername: " + secondUsername)
             HandleNewChat(firstUsername, secondUsername, exportedPrivateKey)
         } else if ((/^CHATACCEPT;/.test(data.toString()))) {
             var chatData = data.toString().slice(11)
