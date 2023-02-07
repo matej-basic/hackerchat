@@ -54,9 +54,6 @@ const HandleNewChat = (firstUsername: String, secondUsername: String, exportedPr
         if (client.username == secondUsername) secondClient = client;
     })
 
-    console.log("secondClient: " + secondClient.username)
-    console.log("firstClient: " + firstClient.username)
-
     NotifyUser(secondClient!, firstClient!, exportedPrivateKey)
 }
 
