@@ -105,6 +105,8 @@ wss.on('connection', (ws) => {
             newConnection = { socket: ws, username: data.toString().slice(10) };
             clients.push(newConnection);
             users.push(newUser);
+            console.log("Added to clients: " + JSON.stringify(newConnection, null, 4))
+            console.log("Added to users: " + JSON.stringify(newUser, null, 4))
 
             clients.forEach(client => {
                 client.socket.send("USERS---" + JSON.stringify(users));
