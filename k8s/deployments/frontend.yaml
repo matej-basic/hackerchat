@@ -16,8 +16,10 @@ spec:
       containers: 
         - name: frontend
           image: matejbasic/frontend
+          environment: 
+            - APPLICATION_DOMAIN: "hackerchat.apps.lab.okd.local"
           ports:
-          - containerPort: 443
+          - containerPort: 4443
           volumeMounts: 
           - name: hackerchat-cert
             mountPath: /run/hackerchat-cert
@@ -40,5 +42,5 @@ spec:
   ports: 
     - name: frontend-https
       protocol: TCP
-      port: 443
-      targetPort: 443
+      port: 4443
+      targetPort: 4443

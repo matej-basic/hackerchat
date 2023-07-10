@@ -20,10 +20,10 @@ spec:
           - containerPort: 3000
           resources:
             limits:
-              cpu: 2000m
+              cpu: 1000m
               memory: 1024Mi
             requests:
-              cpu: 2000m
+              cpu: 1000m
               memory: 1024Mi
           volumeMounts: 
           - name: hackerchat-cert
@@ -49,7 +49,6 @@ metadata:
 spec: 
   selector: 
     app: auth
-  #type: ClusterIP
   ports: 
     - name: auth
       protocol: TCP
