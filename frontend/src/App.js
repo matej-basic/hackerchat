@@ -15,7 +15,7 @@ function App() {
 
   const GetCurrentUser = async () => {
     useEffect(() => {
-      axios.get('https://hackerchat.ml/api/users/currentuser')
+      axios.get('https://hackerchat.apps.lab.okd.local/api/users/currentuser')
       .then(res => {
         const { currentUser } = res.data
         setUser(currentUser);

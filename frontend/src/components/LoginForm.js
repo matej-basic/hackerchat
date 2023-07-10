@@ -6,7 +6,7 @@ const LoginForm = props => {
   const [details, setDetails] = useState({email:"", password:""});
 
   const LogIn = async (details) => {
-    axios.post('https://hackerchat.ml/api/users/signin', details)
+    axios.post('https://hackerchat.apps.lab.okd.local/api/users/signin', details)
       .then(res => {
         setDetails(details);
         props.onChange(details);

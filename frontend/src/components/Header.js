@@ -3,7 +3,7 @@ import axios from 'axios'
 
 const Header = props => {
     const submitHandler = async () => {
-        axios.post('https://hackerchat.ml/api/users/signout', {})
+        axios.post('https://hackerchat.apps.lab.okd.local/api/users/signout', {})
         .then(res => {
             console.log(res.data);
             props.onChange(null);

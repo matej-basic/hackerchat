@@ -2,7 +2,7 @@ import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
-import https from 'https';
+import http from 'http';
 import fs from 'fs';
 
 import { currentUserRouter } from './routes/current-user';
@@ -36,6 +36,6 @@ exp.all('*', async (req, res) => {
 
 exp.use(errorHandler);
 
-const httpsServer = https.createServer(credentials, exp);
+const httpsServer = http.createServer(exp);
 
 export { httpsServer as app };
